@@ -11,7 +11,7 @@ data "aws_ami" "ubuntu" {
     values = ["hvm"]
   }
 
-  owners = ["099720109477"] # Canonical
+  owners = ["099720109477"]
 }
 
 module "ec2_instance" {
@@ -25,7 +25,4 @@ module "ec2_instance" {
   vpc_security_group_ids = [data.terraform_remote_state.s3-state.outputs.vpc.default_security_group_id]
   subnet_id              = data.terraform_remote_state.s3-state.outputs.vpc.public_subnets[0]
   ami                    = data.aws_ami.ubuntu.id
-
-  tags = {
-  }
 }

@@ -1,0 +1,21 @@
+- name: Git checkout
+  hosts: localhost
+  tasks: 
+  - ansible.builtin.git:
+      repo: 'https://github.com/zzawook/profile_website_backend.git'
+      dest: /home/profile_website_backend
+
+- name: Run docker compose
+  hosts: localhost
+  tasks: 
+  - name: Tear down existing services
+    community.docker.docker_compose_v2:
+      project_src: /home/profile_website_backend
+      state: absent
+  - name: Create and start services
+    community.docker.docker_compose_v2:
+      project_src: /home/profile_website_backend
+    register: output
+  - name: Show results
+    ansible.builtin.debug:
+      var: output

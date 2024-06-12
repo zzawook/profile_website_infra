@@ -1,0 +1,11 @@
+[Unit]
+Description=playbook
+Before=motd-news.service
+    
+[Service]
+Type=oneshot
+ExecStart=ansible-playbook /home/ubuntu/startup_playbook.yml
+StandardOutput=journal+console
+    
+[Install]
+WantedBy=multi-user.target

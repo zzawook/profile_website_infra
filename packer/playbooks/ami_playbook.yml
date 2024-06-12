@@ -1,0 +1,9 @@
+- name: Install core packages
+  hosts: localhost
+  tasks: 
+  - name: Install docker
+    ansible.builtin.script: ./scripts/install-docker.sh
+  - name: Install git
+    ansible.builtin.package:
+      name: git
+      state: present

@@ -1,7 +1,7 @@
 module "rds" {
   source = "terraform-aws-modules/rds/aws"
 
-  identifier = "profile-website-rds"
+  identifier = "profile-website-rds-dev"
 
   engine               = "mysql"
   engine_version       = "8.0"
@@ -19,10 +19,10 @@ module "rds" {
 
   iam_database_authentication_enabled = true
 
-  subnet_ids = data.terraform_remote_state.s3-state.outputs.vpc.private_subnets
+  subnet_ids = data.terraform_remote_state.s3-state.outputs.vpc.public_subnets
   vpc_security_group_ids = [data.terraform_remote_state.s3-state.outputs.vpc.default_security_group_id]
 
-  publicly_accessible = false
+  publicly_accessible = true
 
   create_db_subnet_group = true
 
@@ -36,6 +36,8 @@ module "rds" {
       value = "utf8mb4"
     }
   ]
+
+#   backup_window      = "03:00-06:00"  
 
 
   options = [

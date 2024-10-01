@@ -6,9 +6,9 @@ module "rds" {
   engine               = "mysql"
   engine_version       = "8.0"
   family               = "mysql8.0" # DB parameter group
-  major_engine_version = "8.0"   
-  instance_class    = "db.t3.micro"
-  allocated_storage = 5
+  major_engine_version = "8.0"
+  instance_class       = "db.t3.micro"
+  allocated_storage    = 5
 
   db_name  = "profile_website"
   username = "kjaehyeok21"
@@ -19,7 +19,7 @@ module "rds" {
 
   iam_database_authentication_enabled = true
 
-  subnet_ids = data.terraform_remote_state.s3-state.outputs.vpc.private_subnets
+  subnet_ids             = data.terraform_remote_state.s3-state.outputs.vpc.private_subnets
   vpc_security_group_ids = [data.terraform_remote_state.s3-state.outputs.vpc.default_security_group_id]
 
   publicly_accessible = false

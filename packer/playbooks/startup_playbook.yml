@@ -8,6 +8,10 @@
 - name: Run docker compose
   hosts: localhost
   tasks: 
+  - name: Run get_mysql_secret.sh
+    command: /home/profile_website_backend/fetch_secrets.sh
+    args:
+      chdir: /home/profile_website_backend
   - name: Tear down existing services
     community.docker.docker_compose_v2:
       project_src: /home/profile_website_backend

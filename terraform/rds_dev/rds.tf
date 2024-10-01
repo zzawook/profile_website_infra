@@ -17,7 +17,7 @@ module "rds" {
 
   manage_master_user_password = false
 
-  iam_database_authentication_enabled = true
+  iam_database_authentication_enabled = false
 
   subnet_ids = data.terraform_remote_state.s3-state.outputs.vpc.public_subnets
   vpc_security_group_ids = [data.terraform_remote_state.s3-state.outputs.vpc.default_security_group_id]

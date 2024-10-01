@@ -1,8 +1,8 @@
-data "terraform_remote_state" "s3-state" {
+data "terraform_remote_state" "ec2-state" {
   backend = "s3"
   config = {
     bucket = "kjaehyeok21"
-    key    = "infra/tfstate/network"
+    key    = "infra/tfstate/instance"
     region = "ap-southeast-1"
   }
 }

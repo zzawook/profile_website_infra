@@ -14,6 +14,14 @@ source "amazon-ebs" "ubuntu-instance" {
     most_recent = true
   }
   ssh_username = "ubuntu"
+
+  launch_block_device_mappings {
+      device_name = "/dev/sda1"
+      encrypted = false
+      volume_type = "gp3"
+      volume_size = 32
+  }
+  
 }
 
 locals {

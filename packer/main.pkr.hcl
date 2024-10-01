@@ -3,41 +3,47 @@ build {
   sources = ["source.amazon-ebs.ubuntu-instance"]
 
   provisioner "file" {
-    source      = "${path.root}/../.credentials/credentials"
-    destination = "/home/ubuntu/.aws/credentials"
+    source      = ".credentials/credentials"
+    destination = "/tmp/credentials"
   }
 
   provisioner "file" {
-    source      = "${path.root}/../.credentials/config"
-    destination = "/home/ubuntu/.aws/config"
-  }
-
-  provisioner "file" {
-    source      = "${path.root}/startup_playbook.service"
-    destination = "/tmp/startup_playbook.service"
+    source      = ".credentials/config"
+    destination = "/tmp/config"
   }
 
   provisioner "shell" {
-    inline = ["sudo mv /tmp/startup_playbook.service /etc/systemd/system/startup_playbook.service"]
+    inline = ["sudo mkdir /root/.aws"]
+  }
+
+  provisioner "shell" {
+    inline = ["sudo mv /tmp/credentials /root/.aws/credentials"]
+  }
+
+  provisioner "shell" {
+    inline = ["sudo mv /tmp/config /root/.aws/config"]
   }
 
   provisioner "file" {
-    #Path to your own AWS config file
-    source      = "${path.root}/playbooks/startup_playbook.yml"
-    destination = "/home/ubuntu/startup_playbook.yml"
+    source      = "./scripts/instance_start.sh"
+    destination = "/tmp/instance_start.sh"
   }
 
-  provisioner "ansible" {
-      playbook_file = "./playbooks/ami_playbook.yml"
-    }
+  provisioner "shell" {
+    inline = ["sudo mv /tmp/instance_start.sh /var/tmp/instart_start.sh"]
+  }
 
-//   provisioner "shell" {
-//     inline = [
-//       "echo MYSQL_ROOT_PASSWORD=${var.MYSQL_ROOT_PASSWORD} >> /etc/environment",
-//       "echo MYSQL_USER=${var.MYSQL_USER} >> /etc/environment",
-//       "echo MYSQL_PASSWORD=${var.MYSQL_PASSWORD} >> /etc/environment",
-//       "echo MYSQL_DATABASE=${var.MYSQL_DATABASE} >> /etc/environment"
-//     ]
-//     execute_command = "sudo -S sh -c '{{ .Vars }} {{ .Path }}'"
-//   }
+  provisioner "shell" {
+    inline = ["crontab -l | { cat; echo \"0 2 * * * /var/tmp/instance_start.sh\"; } | crontab -"]
+  }
+
+  // Install Docker and Git
+  provisioner "shell" {
+    scripts = [
+      "./scripts/install-packages.sh",
+    ]
+    execute_command = "sudo -S sh -c '{{ .Vars }} {{ .Path }}'"
+  }
+
+  //TODO: WRITE START CONFIGS
 }
